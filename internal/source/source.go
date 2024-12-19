@@ -1,24 +1,29 @@
 package source
 
 import (
+	"bytes"
 	"fmt"
+	"text/template"
 
 	"github.com/hexium310/srcurl/internal/config"
 )
 
-func GetUrl(target string) string {
+func GetUrl(target string) (string, error) {
 	config, err := config.GetConfig()
 	if err != nil {
-		return ""
+		return "", err
 	}
 
 	site, id := DetectSite(target, config.Sites)
 	if site == nil {
-		return ""
+		return "", fmt.Errorf("no matches found for %s", target)
 	}
-	url := BuildUrl(site.Url, id)
+	url, err := BuildUrl(site.Url, id)
+	if err != nil {
+		return "", err
+	}
 
-	return url
+	return url, nil
 }
 
 func DetectSite(target string, sites []config.Site) (*config.Site, string) {
@@ -38,6 +43,16 @@ func DetectSite(target string, sites []config.Site) (*config.Site, string) {
 	return nil, ""
 }
 
-func BuildUrl(url string, id string) string {
-	return fmt.Sprintf(url, id)
+func BuildUrl(urlTemplate string, id string) (string, error) {
+	template := template.Must(template.New("url").Parse(urlTemplate))
+	template.Option("missingkey=error")
+
+	buffer := new(bytes.Buffer)
+	err := template.Execute(buffer, map[string]interface{}{"Id": id})
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		return "", err
+	}
+
+	return buffer.String(), nil
 }

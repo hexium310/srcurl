@@ -1,7 +1,6 @@
 package command
 
 import (
-	"errors"
 	"fmt"
 	"path/filepath"
 
@@ -30,9 +29,9 @@ var RootCmd = &cobra.Command{
 
 		_, filename := filepath.Split(args[0])
 
-		url := source.GetUrl(filename)
-		if url == "" {
-			return errors.New("No matches")
+		url, err := source.GetUrl(filename)
+		if err != nil {
+			return err
 		}
 
 		if copy {
