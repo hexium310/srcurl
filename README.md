@@ -4,16 +4,14 @@ Generate a URL from the filename
 
 ## Installation
 
-Unix:
-
 ```sh
-go install https://github.com/hexium310/srcurl/cmd
+go install github.com/hexium310/srcurl@latest
 ```
 
-Windows:
+If you use Windows and want to use it without opening a terminal, install with `-ldflags '-H windowsgui'`:
 
 ```sh
-go install -ldflags '-H windowsgui' https://github.com/hexium310/srcurl/cmd
+go install -ldflags '-H windowsgui' github.com/hexium310/srcurl@latest
 ```
 
 ## Configuration
