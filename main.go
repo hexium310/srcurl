@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/hexium310/srcurl/cmd/command"
+	"github.com/hexium310/srcurl/cmd"
 )
 
 func main() {
